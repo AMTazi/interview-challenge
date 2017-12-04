@@ -1,9 +1,14 @@
-
+// NOTE: Now the algorithm is not linear after we are filling the map in the same time
 
 export default function calculator(input) {
-  if(!input || input.length < 1) return 0;
+  // this describe the result's shape of this function
+  const result = (water_size = 0, map = []) => ({water_size, map})
+
+  if(!input || input.length < 1) return result();
 
   const length = input.length;
+  const height = Math.max(...input)
+  const map = init_map(input, height)
   let water_size = 0;
 
   let i = 0;
@@ -23,14 +28,14 @@ export default function calculator(input) {
     i++;
   }
 
-  if(i+1 === length) return water_size;
+  if(i+1 === length) return result();
 
   // Second case
   while(j > i && input[j] <= input[j-1]) {
     j--;
   }
 
-  if(j === i) return water_size;
+  if(j === i) return result();
 
 
   /**
@@ -55,6 +60,8 @@ export default function calculator(input) {
       i++;
       if(left > input[i]) {
         water_size += left - input[i];
+        // this is an injection to fill the map by water cell
+        fill_by_water(map, left-input[i], (height-1) -input[i], i)
       } else {
         left = input[i]
       }
@@ -62,11 +69,46 @@ export default function calculator(input) {
       j--;
       if(right > input[j]) {
         water_size += right - input[j];
+        // this is an injection to fill the map by water cell
+        fill_by_water(map, right-input[j], (height-1) -input[j], j)
       } else {
         right = input[j]
       }
     }
   }
 
-  return water_size;
+  return result(water_size, map);
+}
+
+/**
+
+*/
+function init_map(input, height) {
+  const map = []
+  for(let i = 0; i < height; i++) {
+    const row = []
+
+    for(let j = 0; j < input.length; j++) {
+      if((i+1) > (height - input[j])) {
+        row.push(1)
+      } else {
+        row.push(0)
+      }
+    }
+    map.push(row)
+  }
+
+  return map
+}
+
+/**
+
+*/
+function fill_by_water(map, water_size, start, position) {
+  let j = start;
+  while(water_size > 0) {
+    map[j][position] = 2;
+    water_size--;
+    j--;
+  }
 }
