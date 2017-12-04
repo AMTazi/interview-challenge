@@ -17,10 +17,11 @@ export default function calculator(input) {
   /**
     TODO: update the explanation!
 
-    We have two case when the shape can't make a basin
+    We have two cases when the shape can't make a basin
 
-    - First case -> when all bars matches this : the height of the left bar is less than the height of the right bar.
-    - Second case ->  when the first case didn't match but it matches this: the height of the right bar is less than the height of left bar till it reaches the cursor i
+    - First Case -> When all bars from the left to the right are increasing in the height.
+    - Second Case -> When the first case didn't match and the bars from the right to the left are increasing in the height till it reaches the cursor i.
+
   */
 
   // First case
@@ -44,11 +45,10 @@ export default function calculator(input) {
     Depends on this:
       "The water in one cell always flows to the neighboring cell of least height"
 
-    so we are gonna always pick the less height between the left and the right bar
-    and then we can calculate the water_size by substraction between the height of
-    the current picked bar and the height of the next bar
-
-    TODO: improve the explanation
+    so always we are gonna pick the min height between the left and the right bar
+    and then we can calculate the water_size by subtraction between the height of
+    the current picked bar and the height of the next bar and this depends on the
+    direction that we are in if it's from left to right or the inverse
 
   */
 
@@ -80,6 +80,10 @@ export default function calculator(input) {
   return result(water_size, map);
 }
 
+export const EMPTY = 0;
+export const BLOCK = 1;
+export const WATER = 2;
+
 /**
 
 */
@@ -90,9 +94,9 @@ function init_map(input, height) {
 
     for(let j = 0; j < input.length; j++) {
       if((i+1) > (height - input[j])) {
-        row.push(1)
+        row.push(BLOCK)
       } else {
-        row.push(0)
+        row.push(EMPTY)
       }
     }
     map.push(row)
@@ -107,7 +111,7 @@ function init_map(input, height) {
 function fill_by_water(map, water_size, start, position) {
   let j = start;
   while(water_size > 0) {
-    map[j][position] = 2;
+    map[j][position] = WATER;
     water_size--;
     j--;
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
+import { EMPTY, BLOCK, WATER } from '../calculator'
 
 const Wrapper = styled.div`
   border: 1px solid #eaeaea;
@@ -14,7 +15,7 @@ const Box = styled.div`
   border: 1px solid #bababa;
   width: ${({length}) => ((length && 1000/length) || '100')+'px'};
   height: ${({length}) => ((length && 1000/length) || '100')+'px'};
-  background-color: ${({p}) => (p === 0 && 'white') || (p === 1 && '#f542b6') || (p === 2 && '#6dadf7')};
+  background-color: ${({p}) => (p === EMPTY && 'white') || (p === BLOCK && '#f542b6') || (p === WATER && '#6dadf7')};
 `
 
 
