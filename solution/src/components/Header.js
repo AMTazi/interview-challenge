@@ -39,14 +39,16 @@ class Header extends Component {
   }
 
   onChange(e) {
-    const value = e.currentTarget.value
-    console.log(value);
-    this.setState({input: '2 1 3'})
+    // 2 5 1 3 1 2 1 7 7 6
+    const input = e.currentTarget.value
+    this.setState({input})
   }
 
   parseInput() {
-    return [2, 5, 1, 3, 1, 2, 1, 7, 7, 6]
+    const value = this.state.input.trim().split(/\s+/).map(v => parseInt(v, 10) || 0)
+    return value
   }
+
 
   render() {
     const { run, reset } = this.props;
@@ -59,7 +61,7 @@ class Header extends Component {
         />
         <div style={{marginTop: '15px'}}>
           <Button onClick={() => run && run(this.parseInput())}>Run</Button>
-          <Button style={{backgroundColor: 'red'}} onClick={() => reset && reset() }>Reset</Button>
+          <Button style={{backgroundColor: 'red'}} onClick={() => reset && reset()}>Reset</Button>
         </div>
       </Wrapper>
     );

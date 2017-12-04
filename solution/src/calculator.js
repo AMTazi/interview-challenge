@@ -28,14 +28,14 @@ export default function calculator(input) {
     i++;
   }
 
-  if(i+1 === length) return result();
+  if(i+1 === length) return result(water_size, map);
 
   // Second case
   while(j > i && input[j] <= input[j-1]) {
     j--;
   }
 
-  if(j === i) return result();
+  if(j === i) return result(water_size, map);
 
 
   /**

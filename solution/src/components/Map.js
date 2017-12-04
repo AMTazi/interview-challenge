@@ -21,7 +21,7 @@ const Box = styled.div`
 class Map extends Component {
 
   render_map() {
-    if(this.props.map.length < 1) return <div>nothing</div>
+    if(this.props.map.length < 1) return <div></div>
     const boxes = []
     this.props.map.forEach((row, i) => {
       row.forEach((v, j) => {

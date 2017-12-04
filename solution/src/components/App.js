@@ -15,9 +15,7 @@ class App extends Component {
   }
 
   run(input) {
-    console.log(input);
     const { water_size, map } = calculator(input)
-    console.log('map: ', map);
     this.setState({water_size, map, length: input.length})
   }
 

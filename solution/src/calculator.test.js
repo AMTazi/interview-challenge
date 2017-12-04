@@ -10,12 +10,12 @@ describe('Calculator', () => {
     expect(water_size).toEqual(0)
   })
 
-  it('should return 0 | it should match the first case in algorithm', () => {
+  it('should return 0 | it should match the first case in the algorithm', () => {
     const { water_size } = calculator([2, 3, 4, 5])
     expect(water_size).toEqual(0)
   })
 
-  it('should return 0 | it should match the second case in algorithm', () => {
+  it('should return 0 | it should match the second case in the algorithm', () => {
     const { water_size } = calculator([2, 3, 5, 4, 3, 1])
     expect(water_size).toEqual(0)
   })
