@@ -32,7 +32,41 @@ export default function calculator(input) {
 
   if(j === i) return water_size;
 
-  // Implementing what I've done in my paper
+
+  /**
+    Now we have at least one basin and the basin has the left bar and right bar.
+
+    Depends on this:
+      "The water in one cell always flows to the neighboring cell of least height"
+
+    so we are gonna always pick the less height between the left and the right bar
+    and then we can calculate the water_size by substraction between the height of
+    the current picked bar and the height of the next bar
+
+    TODO: improve the explanation
+
+  */
+
+  let left = input[i];
+  let right = input[j];
+
+  while((i+1) !== j) {
+    if(left < right) {
+      i++;
+      if(left > input[i]) {
+        water_size += left - input[i];
+      } else {
+        left = input[i]
+      }
+    } else {
+      j--;
+      if(right > input[j]) {
+        water_size += right - input[j];
+      } else {
+        right = input[j]
+      }
+    }
+  }
 
   return water_size;
 }
