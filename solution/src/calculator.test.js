@@ -1,4 +1,4 @@
-import calculator from './calculator'
+import calculator, { build_map } from './calculator'
 
 describe('Calculator', () => {
 
@@ -21,8 +21,13 @@ describe('Calculator', () => {
   })
 
   it('should return 17', () => {
-    const { water_size, map } = calculator([2, 5, 1, 3, 1, 2, 1, 7, 7, 6])
+    const { water_size } = calculator([2, 5, 1, 3, 1, 2, 1, 7, 7, 6])
     expect(water_size).toEqual(17)
+  })
+
+  it('should build the map in asynchronous way', async () => {
+    const { tasks } = calculator([2, 5, 1, 3, 1, 2, 1, 7, 7, 6])
+    const map = await build_map(tasks)
     // console.log(map);
   })
 })

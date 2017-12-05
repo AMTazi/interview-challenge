@@ -37,7 +37,7 @@ class Map extends Component {
 
     return (
       <Wrapper >
-        {this.render_map()}
+        {this.props.pending? <div>Pending....</div> : this.render_map()}
       </Wrapper>
     );
   }

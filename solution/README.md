@@ -31,3 +31,7 @@ the current picked bar and the height of the next bar and this depends on the
 direction that we are in if it's from left to right or the inverse.
 
 ![three](./three.png)
+
+The last commit is about improving the map construction via an asynchronous work
+
+![performance]('./performance')

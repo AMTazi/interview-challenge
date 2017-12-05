@@ -1,22 +1,27 @@
-// NOTE: Now the algorithm is not linear after we are filling the map in the same time
+/**
+  NOTE: Now the algorithm is linear after we are filling the map in the same time
+        but in asynchronous way and this done via a strategy that allow us
+        to store all the map's works in an array called tasks
+
+*/
 
 export default function calculator(input) {
   // this describe the result's shape of this function
-  const result = (water_size = 0, map = []) => ({water_size, map})
+  const result = (water_size = 0, tasks = []) => ({water_size, tasks})
 
   if(!input || input.length < 1) return result();
 
+  const tasks = []
   const length = input.length;
   const height = Math.max(...input)
-  const map = init_map(input, height)
+
+  tasks.push(init_map(input, height))
   let water_size = 0;
 
   let i = 0;
   let j = length-1;
 
   /**
-    TODO: update the explanation!
-
     We have two cases when the shape can't make a basin
 
     - First Case -> When all bars from the left to the right are increasing in the height.
@@ -29,14 +34,14 @@ export default function calculator(input) {
     i++;
   }
 
-  if(i+1 === length) return result(water_size, map);
+  if(i+1 === length) return result(water_size, tasks);
 
   // Second case
   while(j > i && input[j] <= input[j-1]) {
     j--;
   }
 
-  if(j === i) return result(water_size, map);
+  if(j === i) return result(water_size, tasks);
 
 
   /**
@@ -61,7 +66,7 @@ export default function calculator(input) {
       if(left > input[i]) {
         water_size += left - input[i];
         // this is an injection to fill the map by water cell
-        fill_by_water(map, left-input[i], (height-1) -input[i], i)
+        tasks.push(fill_by_water(left-input[i], (height-1) -input[i], i))
       } else {
         left = input[i]
       }
@@ -70,14 +75,14 @@ export default function calculator(input) {
       if(right > input[j]) {
         water_size += right - input[j];
         // this is an injection to fill the map by water cell
-        fill_by_water(map, right-input[j], (height-1) -input[j], j)
+        tasks.push(fill_by_water(right-input[j], (height-1) -input[j], j))
       } else {
         right = input[j]
       }
     }
   }
 
-  return result(water_size, map);
+  return result(water_size, tasks);
 }
 
 export const EMPTY = 0;
@@ -88,31 +93,62 @@ export const WATER = 2;
 
 */
 function init_map(input, height) {
-  const map = []
-  for(let i = 0; i < height; i++) {
-    const row = []
+  return () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
 
-    for(let j = 0; j < input.length; j++) {
-      if((i+1) > (height - input[j])) {
-        row.push(BLOCK)
-      } else {
-        row.push(EMPTY)
-      }
-    }
-    map.push(row)
+        const map = []
+        for(let i = 0; i < height; i++) {
+          const row = []
+
+          for(let j = 0; j < input.length; j++) {
+            if((i+1) > (height - input[j])) {
+              row.push(BLOCK)
+            } else {
+              row.push(EMPTY)
+            }
+          }
+          map.push(row)
+        }
+
+        resolve(map)
+      }, 0);
+    })
   }
 
-  return map
 }
 
 /**
 
 */
-function fill_by_water(map, water_size, start, position) {
-  let j = start;
-  while(water_size > 0) {
-    map[j][position] = WATER;
-    water_size--;
-    j--;
+function fill_by_water(water_size, start, position) {
+  return (map) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+
+          let j = start;
+          while(water_size > 0) {
+            map[j][position] = WATER;
+            water_size--;
+            j--;
+          }
+
+          resolve(map)
+      }, 0);
+    })
   }
+}
+
+/**
+  this is an asynchronous function that will construct a map for us
+  depending on the tasks
+*/
+export async function build_map(tasks) {
+  let map = await tasks[0]();
+
+  for(let i = 1; i < tasks.length; i++) {
+    map = await tasks[i](map)
+  }
+
+  return map
 }
