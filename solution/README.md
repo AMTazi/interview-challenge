@@ -34,4 +34,4 @@ direction that we are in if it's from left to right or the inverse.
 
 The last commit is about improving the map construction via an asynchronous work
 
-![performance]('./performance')
+![performance]('./performance.png')
