@@ -14,40 +14,12 @@ export default function calculator(input) {
   const tasks = []
   const length = input.length;
   const height = Math.max(...input)
-
-  tasks.push(init_map(input, height))
   let water_size = 0;
 
-  let i = 0;
-  let j = length-1;
+  tasks.push(init_map(input, height))
 
   /**
-    We have two cases when the shape can't make a basin
-
-    - First Case -> When all bars from the left to the right are increasing in the height.
-    - Second Case -> When the first case didn't match and the bars from the right to the left are increasing in the height till it reaches the cursor i.
-
-  */
-
-  // First case
-  while(i < length && input[i] <= input[i+1]) {
-    i++;
-  }
-
-  if(i+1 === length) return result(water_size, tasks);
-
-  // Second case
-  while(j > i && input[j] <= input[j-1]) {
-    j--;
-  }
-
-  if(j === i) return result(water_size, tasks);
-
-
-  /**
-    Now we have at least one basin and the basin has the left bar and right bar.
-
-    Depends on this:
+    Depending on this:
       "The water in one cell always flows to the neighboring cell of least height"
 
     so always we are gonna pick the min height between the left and the right bar
@@ -57,6 +29,9 @@ export default function calculator(input) {
 
   */
 
+  let i = 0;
+  let j = length-1;
+
   let left = input[i];
   let right = input[j];
 
@@ -65,7 +40,6 @@ export default function calculator(input) {
       i++;
       if(left > input[i]) {
         water_size += left - input[i];
-        // this is an injection to fill the map by water cell
         tasks.push(fill_by_water(left-input[i], (height-1) -input[i], i))
       } else {
         left = input[i]
@@ -74,7 +48,6 @@ export default function calculator(input) {
       j--;
       if(right > input[j]) {
         water_size += right - input[j];
-        // this is an injection to fill the map by water cell
         tasks.push(fill_by_water(right-input[j], (height-1) -input[j], j))
       } else {
         right = input[j]
